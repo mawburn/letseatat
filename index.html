@@ -8,7 +8,7 @@
 <body>
   <div class="container">
     <h3>You're going to</h3>
-    <h1 id="choice">Error</h1>
+    <h1 id="choice"></h1>
   </div>
   <script> 
 (function(window, document) {
@@ -17,13 +17,29 @@
     .then(res => res.json())
     .then(json => {
       makeChoice(json)
+    }).catch(err => {
+      document.getElementById('choice').innerHTML = 'error'
     })
 
-  function makeChoice(places) {
-    let output = document.getElementById('choice')
-    let randSpot = Math.floor(Math.random() * places.length)
+  function weightList(places) {
+    let outputArr = []
 
-    output.innerHTML = places[randSpot].name
+    for(place in places) {
+      for(let i=place.weight; i > 0; --i) {
+        outputArr.push(place)
+      }
+    }
+
+    return outputArr
+  }
+
+  function makeChoice(places) {
+    let weightedList = weightList(places)
+    let output = document.getElementById('choice')
+    let randSpot = Math.floor(Math.random() * weightedList.length)
+    console.log(weightedList)
+
+    output.innerHTML = weightedList[randSpot].name
   }
 
 })(window, document)

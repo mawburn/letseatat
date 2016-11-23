@@ -1,0 +1,46 @@
+[
+{
+  "name": "Popeyes",
+  "weight": 1
+},
+{
+  "name": "Wendy's",
+  "weight": 1
+},
+{
+  "name": "Moes",
+  "weight": 5
+},
+{
+  "name": "Crazy Hibachi - Mongolian Grill",
+  "weight": 5
+},
+{
+  "name": "Crazy Hibachi - Hibachi",
+  "weight": 5
+},
+{
+  "name": "Mama's Gyros",
+  "weight": 5
+},
+{
+  "name": "On the Border",
+  "weight": 5
+},
+{
+  "name": "Buffalo Wild Wings",
+  "weight": 5
+},
+{
+  "name": "Larry's",
+  "weight": 5
+},
+{
+  "name": "BJ's Brewhouse",
+  "weight": 5
+},
+{
+  "name": "Panera Bread",
+  "weight": 5
+}
+]

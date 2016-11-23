@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Lunch Picker</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <h3>You're going to</h3>
+    <h1 id="choice">Error</h1>
+  </div>
+  <script> 
+(function(window, document) {
+
+  fetch('resturaunts.json')
+    .then(res => res.json())
+    .then(json => {
+      makeChoice(json)
+    })
+
+  function makeChoice(places) {
+    let output = document.getElementById('choice')
+    let randSpot = Math.floor(Math.random() * places.length)
+
+    output.innerHTML = places[randSpot].name
+  }
+
+})(window, document)
+  </script>
+</body>
+</html>

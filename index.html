@@ -3,46 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <title>Random Lunch Picker</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
-</head>
-<body>
-  <div class="container">
-    <h3>You're going to</h3>
-    <h1 id="choice"></h1>
-  </div>
-  <script> 
-(function(window, document) {
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap-flex.css" integrity="sha256-5E2slMOe9pemBvrSE9dbFPkZcx+3ooCJOoFapVey31s=" crossorigin="anonymous" />
 
-  fetch('resturaunts.json')
-    .then(res => res.json())
-    .then(json => {
-      makeChoice(json)
-    }).catch(err => {
-      document.getElementById('choice').innerHTML = 'error'
-    })
-
-  function weightList(places) {
-    let outputArr = []
-
-    for(place in places) {
-      for(let i=place.weight; i > 0; --i) {
-        outputArr.push(place)
-      }
+  <style>
+    .full-vh {
+      height: 60vh;
     }
 
-    return outputArr
-  }
+    .t-center {
+      text-align: center;
+    }
 
-  function makeChoice(places) {
-    let weightedList = weightList(places)
-    let output = document.getElementById('choice')
-    let randSpot = Math.floor(Math.random() * weightedList.length)
-    console.log(weightedList)
+    .show {
+      transition: opacity 777ms;
+    }
 
-    output.innerHTML = weightedList[randSpot].name
-  }
+    .hide {
+      opacity: 0;
+    }
 
-})(window, document)
-  </script>
+    .nobox {
+      border: none;
+      border-bottom: 3px solid #aaa;
+      border-radius: 0;
+    }
+    </style>
+</head>
+<body>
+  
+  <div class="container">
+    <div class="row full-vh flex-items-xs-middle">
+      <div class="col-xs">
+        <h1 class="display t-center">Eat at...</h1>
+        <h2 id="choice" class="t-center hide"></h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs">
+        <button type="button" id="addmore" class="btn btn-secondary">Edit List</button>
+
+        <div class="form-group row mt-1 hide">
+          <label for="opt1" class="col-form-label sr-only">Name</label>
+          <div class="col-xs-5">
+            <input id="opt1" type="text" placeholder="Restaurant Name" class="form-control nobox">
+          </div>
+
+          <label for="opt1-slider" class="col-xs-1 col-form-label">Weight</label>
+          <div class="col-xs-4">
+            <input id="opt1-slider" type="range" min="1" max="10" value="5" class="form-control">
+          </div>
+          <div id="opt1-val" class="col-xs-2"></div>
+        </div>          
+      </div>
+    </div>   
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

@@ -5,7 +5,13 @@
   <title>Random Lunch Picker</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap-flex.css" integrity="sha256-5E2slMOe9pemBvrSE9dbFPkZcx+3ooCJOoFapVey31s=" crossorigin="anonymous" />
 
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
   <style>
+    input:focus, button:focus {
+        outline:0 !important;
+    }
+
     .full-vh {
       height: 60vh;
     }
@@ -15,46 +21,70 @@
     }
 
     .show {
-      transition: opacity 777ms;
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 250ms linear;
     }
 
     .hide {
+      visibility: hidden;
       opacity: 0;
+      transition: visibility 0s 250ms, opacity 250ms linear;
     }
 
     .nobox {
       border: none;
-      border-bottom: 3px solid #aaa;
+      border-bottom: 3px solid #ccc;
       border-radius: 0;
+    }
+
+    .fa {
+      pointer-events:none;
     }
     </style>
 </head>
 <body>
   
   <div class="container">
-    <div class="row full-vh flex-items-xs-middle">
+    <div class="row full-vh flex-items-xs-middle t-center">
       <div class="col-xs">
         <h1 class="display t-center">Eat at...</h1>
         <h2 id="choice" class="t-center hide"></h2>
+    
+        <div class="row mt-3 flex-items-xs-center">
+          <div class="col-sm col-md-4 ">
+            <button id="rollagain" class="btn btn-primary btn-block"><i class="fa fa-fw fa-random"></i>Roll Again</button>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-xs">
-        <button type="button" id="addmore" class="btn btn-secondary">Edit List</button>
+      <div class="col-md">
+        <button type="button" id="addmore" class="btn btn-secondary"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i>Edit List</button>
+        
+        <div id="addwrapper" class="hide mt-1">
+          <div class="form-group row mt-1">
+            <label for="opt1" class="col-form-label sr-only">Name</label>
+            <div class="col-md-5">
+              <input id="opt1" type="text" placeholder="Restaurant Name" class="form-control nobox">
+            </div>
 
-        <div class="form-group row mt-1 hide">
-          <label for="opt1" class="col-form-label sr-only">Name</label>
-          <div class="col-xs-5">
-            <input id="opt1" type="text" placeholder="Restaurant Name" class="form-control nobox">
-          </div>
+            <label for="opt1-slider" class="col-md-1 col-form-label">Weight</label>
+            <div class="col-xs-10 col-md-4">
+              <input id="opt1-slider" type="range" min="1" max="10" value="5" class="form-control">
+            </div>
+            <div id="opt1-val" class="col-xs-2 col-md-1"></div>
+            <div class="col-md-1"><button type="button" id="opt1-add" class="btn btn-primary btn-block"><i class="fa fa-plus-circle fa-fw"></i></button></div>
+          </div> 
 
-          <label for="opt1-slider" class="col-xs-1 col-form-label">Weight</label>
-          <div class="col-xs-4">
-            <input id="opt1-slider" type="range" min="1" max="10" value="5" class="form-control">
+          <div class="row flex-items-xs-center mt-3 mb-3">
+            <div class="col-sm col-md-6">
+              <ul id="currentlist" class="list-group">
+              </ul>
+            </div>
           </div>
-          <div id="opt1-val" class="col-xs-2"></div>
-        </div>          
+        </div>         
       </div>
     </div>   
   </div>

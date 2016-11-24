@@ -143,4 +143,20 @@
       out.classList.remove('hide')
     }, 300)
   })
+
+  const addOpt = d.getElementById('opt1-add')
+
+  addOpt.addEventListener('click', () => {
+    const name = d.getElementById('opt1')
+
+    const place = {name: name.value, weight: slider.value}
+
+    name.value = ''
+    slider.value = 5
+    slider.dispatchEvent(new Event('input'))
+
+    rList.baseList.push(place)
+    wList = rList.getWeightedList()
+    ulList.append(new listItemView(place))
+  })
 })(document);

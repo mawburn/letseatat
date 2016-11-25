@@ -47,10 +47,11 @@
   }
 
   Places.prototype.weightedList = function() {
+    let list = this.getList()
     let weightedList = []
 
-    for(let i=0; i < this.getList().length; i++) {
-      for(let k=0; k < this.getList()[i].weight; k++) {
+    for(let i=0; i < list.length; i++) {
+      for(let k=0; k < list[i].weight; k++) {
         weightedList.push(i)
       }
     }
@@ -84,7 +85,16 @@
 
     let tag = doc.createElement('span')
     let tagText = doc.createTextNode(weight)
-    tag.classList.add('tag', 'tag-default', 'tag-pill', 'float-xs-right')
+    tag.classList.add('tag', 'tag-pill', 'float-xs-right')
+
+    if(weight <= 2) {
+      tag.classList.add('tag-danger')
+    } else if(weight >= 8) {
+      tag.classList.add('tag-success')
+    } else {
+      tag.classList.add('tag-default')
+    }
+
     tag.appendChild(tagText)
 
     li.appendChild(btn)

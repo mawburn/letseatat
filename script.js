@@ -1,11 +1,9 @@
-;((d) => {
+;((win, doc) => {
   'use strict'
 
-  let Places = function(placeList) {
-    if(placeList !== undefined) {
-      this.list = placeList
-    } else {
-      this.list = [
+  let Places = function() {
+    if(!win.localStorage.getItem('places')) {
+       let list = [
         { "name": "Popeyes", "weight": 1 },
         { "name": "Wendy's", "weight": 2 },
         { "name": "Moes", "weight": 5 },
@@ -17,24 +15,40 @@
         { "name": "BJ's Brewhouse", "weight": 5 },
         { "name": "Panera Bread", "weight": 5 }
       ]
+      
+      win.localStorage.setItem('places', JSON.stringify(list))
     }
   }
 
+  Places.prototype.setList = function(list) {
+    win.localStorage.setItem('places', JSON.stringify(list))
+  }
+
+  Places.prototype.getList = function() {
+    return JSON.parse(win.localStorage.getItem('places'))
+  }
+
   Places.prototype.add = function(name, weight) {
-    this.list.push({name, weight})
+    let list = this.getList()
+    list.push({name, weight})
+
+    this.setList(list)
   }
 
   Places.prototype.remove = function(name) {
-    this.list = this.list.filter(place => {
+    let list = this.getList()
+    let newList = list.filter(place => {
       return place.name !== name
     })
+
+    this.setList(newList)
   }
 
   Places.prototype.weightedList = function() {
     let weightedList = []
 
-    for(let i=0; i < this.list.length; i++) {
-      for(let k=0; k < this.list[i].weight; k++) {
+    for(let i=0; i < this.getList().length; i++) {
+      for(let k=0; k < this.getList()[i].weight; k++) {
         weightedList.push(i)
       }
     }
@@ -47,25 +61,25 @@
     let randIndex = Math.floor(Math.random() * weightedList.length)
     let weightedIndex = weightedList[randIndex]
 
-    return this.list[weightedIndex]
+    return this.getList()[weightedIndex]
   }
 
   // ------ 
 
   let DisplayListItem = function(name, weight) { 
-    let li = d.createElement('li')
+    let li = doc.createElement('li')
     li.classList.add('list-group-item')
 
-    let liText = d.createTextNode(name)
+    let liText = doc.createTextNode(name)
 
-    let icon = d.createElement('i')
+    let icon = doc.createElement('i')
     icon.classList.add('fa', 'fa-fw', 'fa-trash')
 
-    let btn = d.createElement('button')
+    let btn = doc.createElement('button')
     btn.classList.add('btn', 'btn-danger', 'mr-3', 'remove-place')
     btn.setAttribute('data-name', name)
 
-    let tag = d.createElement('span')
+    let tag = doc.createElement('span')
     tag.classList.add('tag', 'tag-default', 'tag-pill')
 
     btn.appendChild(icon)
@@ -81,17 +95,17 @@
   let places = new Places()
 
   // page elms
-  const choiceElm = d.getElementById('choice')
-  const rollAgainElm = d.getElementById('roll-again')
+  const choiceElm = doc.getElementById('choice')
+  const rollAgainElm = doc.getElementById('roll-again')
 
-  const newPaneElm = d.getElementById('new-pane')
-  const newPaneToggleElm = d.getElementById('new-pane-toggle')
-  const newNameElm = d.getElementById('new-name')
-  const newWeightElm = d.getElementById('new-weight')
-  const newWeightValElm = d.getElementById('new-weight-val')
-  const newAddElm = d.getElementById('new-add')
+  const newPaneElm = doc.getElementById('new-pane')
+  const newPaneToggleElm = doc.getElementById('new-pane-toggle')
+  const newNameElm = doc.getElementById('new-name')
+  const newWeightElm = doc.getElementById('new-weight')
+  const newWeightValElm = doc.getElementById('new-weight-val')
+  const newAddElm = doc.getElementById('new-add')
 
-  const curListElm = d.getElementById('cur-list')
+  const curListElm = doc.getElementById('cur-list')
 
   // init page choice
   choiceElm.innerHTML = places.getRandom().name
@@ -110,7 +124,7 @@
     }, 300)   
   })
 
-  places.list.forEach((place, i) => {
+  places.getList().forEach((place, i) => {
     curListElm.appendChild(new DisplayListItem(place.name, place.weight))
   })
 
@@ -138,16 +152,18 @@
     const name = newNameElm.value
     const weight = newWeightElm.value
 
-    places.add(name, weight)
+    if(name.length !== 0) {
+      places.add(name, weight)
 
-    newNameElm.value = ''
-    newWeightElm.value = 5
-    newWeightElm.dispatchEvent(new Event('input'))
+      newNameElm.value = ''
+      newWeightElm.value = 5
+      newWeightElm.dispatchEvent(new Event('input'))
 
-    curListElm.appendChild(new DisplayListItem(name, weight))
+      curListElm.appendChild(new DisplayListItem(name, weight))
+    }
   })
 
-  d.body.addEventListener('click', (e) => {
+  doc.body.addEventListener('click', (e) => {
     if(e.target.classList.contains('remove-place')) {
       const name = e.target.dataset.name
       const parentNode = e.target.parentNode
@@ -162,4 +178,4 @@
       }, 300)
     }
   })
-})(document);
+})(window, document);

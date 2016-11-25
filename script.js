@@ -2,7 +2,9 @@
   'use strict'
 
   let Places = function() {
-    if(!win.localStorage.getItem('places')) {
+    this.localStorageName = 'places'
+
+    if(!win.localStorage.getItem(this.localStorageName)) {
        let list = [
         { "name": "Popeyes", "weight": 1 },
         { "name": "Wendy's", "weight": 2 },
@@ -15,17 +17,17 @@
         { "name": "BJ's Brewhouse", "weight": 5 },
         { "name": "Panera Bread", "weight": 5 }
       ]
-      
-      win.localStorage.setItem('places', JSON.stringify(list))
+
+      win.localStorage.setItem(this.localStorageName, JSON.stringify(list))
     }
   }
 
   Places.prototype.setList = function(list) {
-    win.localStorage.setItem('places', JSON.stringify(list))
+    win.localStorage.setItem(this.localStorageName, JSON.stringify(list))
   }
 
   Places.prototype.getList = function() {
-    return JSON.parse(win.localStorage.getItem('places'))
+    return JSON.parse(win.localStorage.getItem(this.localStorageName))
   }
 
   Places.prototype.add = function(name, weight) {
@@ -78,11 +80,13 @@
     let btn = doc.createElement('button')
     btn.classList.add('btn', 'btn-danger', 'mr-3', 'remove-place')
     btn.setAttribute('data-name', name)
+    btn.appendChild(icon)
 
     let tag = doc.createElement('span')
-    tag.classList.add('tag', 'tag-default', 'tag-pill')
+    let tagText = doc.createTextNode(weight)
+    tag.classList.add('tag', 'tag-default', 'tag-pill', 'float-xs-right')
+    tag.appendChild(tagText)
 
-    btn.appendChild(icon)
     li.appendChild(btn)
     li.appendChild(tag)
     li.appendChild(liText)

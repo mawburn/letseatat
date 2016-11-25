@@ -4,7 +4,9 @@
   let Places = function() {
     this.localStorageName = 'places'
 
-    if(!win.localStorage.getItem(this.localStorageName)) {
+    let initPlaces = win.localStorage.getItem(this.localStorageName)
+
+    if(!initPlaces || JSON.parse(initPlaces).length <= 1) {
        let list = [
         { "name": "Popeyes", "weight": 1 },
         { "name": "Wendy's", "weight": 2 },

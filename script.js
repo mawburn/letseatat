@@ -1,162 +1,165 @@
 ;((d) => {
   'use strict'
 
-  let rList = {
+  let Places = function(placeList) {
+    if(placeList !== undefined) {
+      this.list = placeList
+    } else {
+      this.list = [
+        { "name": "Popeyes", "weight": 1 },
+        { "name": "Wendy's", "weight": 2 },
+        { "name": "Moes", "weight": 5 },
+        { "name": "Crazy Hibachi", "weight": 5 },
+        { "name": "Mama's Gyros", "weight": 5 },
+        { "name": "On the Border", "weight": 5 },
+        { "name": "Buffalo Wild Wings", "weight": 5 },
+        { "name": "Larry's", "weight": 5 },
+        { "name": "BJ's Brewhouse", "weight": 5 },
+        { "name": "Panera Bread", "weight": 5 }
+      ]
+    }
+  }
 
-    baseList: [
-      { "name": "Popeyes", "weight": 1 },
-      { "name": "Wendy's", "weight": 2 },
-      { "name": "Moes", "weight": 5 },
-      { "name": "Crazy Hibachi", "weight": 5 },
-      { "name": "Mama's Gyros", "weight": 5 },
-      { "name": "On the Border", "weight": 5 },
-      { "name": "Buffalo Wild Wings", "weight": 5 },
-      { "name": "Larry's", "weight": 5 },
-      { "name": "BJ's Brewhouse", "weight": 5 },
-      { "name": "Panera Bread", "weight": 5 }
-    ],
-    
-    addTo: (name, weight = 5) => {
-      baseList.push({name, weight})
-    },
+  Places.prototype.add = function(name, weight) {
+    this.list.push({name, weight})
+  }
 
-    getWeightedList: function() {
-      let weightedList = []
+  Places.prototype.remove = function(name) {
+    this.list = this.list.filter(place => {
+      return place.name !== name
+    })
+  }
 
-      for(let i=0; i < this.baseList.length; i++) {
-        for(let k=0; k < this.baseList[i].weight; k++) {
-          weightedList.push(i)
-        }
+  Places.prototype.weightedList = function() {
+    let weightedList = []
+
+    for(let i=0; i < this.list.length; i++) {
+      for(let k=0; k < this.list[i].weight; k++) {
+        weightedList.push(i)
       }
+    }
 
-      return weightedList
-    }  
+    return weightedList
   }
 
-  let listItemView = function(place) {
-    let liElm = d.createElement('li')
-    let liText = d.createTextNode(place.name)
+  Places.prototype.getRandom = function() {
+    let weightedList = this.weightedList()
+    let randIndex = Math.floor(Math.random() * weightedList.length)
+    let weightedIndex = weightedList[randIndex]
 
-    let btnElm = d.createElement('button')
-    let iconElm = d.createElement('i')
-    iconElm.classList.add('fa')
-    iconElm.classList.add('fa-fw')
-    iconElm.classList.add('fa-trash')
-
-    btnElm.appendChild(iconElm)
-
-    btnElm.classList.add('btn')
-    btnElm.classList.add('btn-danger')
-    btnElm.classList.add('mr-3')
-    btnElm.classList.add('remove')
-    btnElm.setAttribute('data-name', place.name)
-
-    liElm.appendChild(btnElm)
-
-    let tagElm = d.createElement('span')
-    let tagText = d.createTextNode(place.weight)
-
-    tagElm.appendChild(tagText)
-
-    tagElm.classList.add('tag')
-    tagElm.classList.add('tag-default')
-    tagElm.classList.add('tag-pill')
-    tagElm.classList.add('float-xs-right')
-
-    liElm.appendChild(tagElm)
-    liElm.appendChild(liText)
-
-    liElm.classList.add('list-group-item')
-
-    return liElm
+    return this.list[weightedIndex]
   }
 
-  const ulList = d.getElementById('currentlist')
+  // ------ 
 
-  rList.baseList.forEach((place, i) => {
-    ulList.appendChild(new listItemView(place))
-  })
+  let DisplayListItem = function(name, weight) { 
+    let li = d.createElement('li')
+    li.classList.add('list-group-item')
 
-  const out = d.getElementById('choice')
-  let wList = rList.getWeightedList()
-  let rand = Math.floor(Math.random() * wList.length)
+    let liText = d.createTextNode(name)
 
-  out.innerHTML = rList.baseList[wList[rand]].name
+    let icon = d.createElement('i')
+    icon.classList.add('fa', 'fa-fw', 'fa-trash')
 
+    let btn = d.createElement('button')
+    btn.classList.add('btn', 'btn-danger', 'mr-3', 'remove-place')
+    btn.setAttribute('data-name', name)
+
+    let tag = d.createElement('span')
+    tag.classList.add('tag', 'tag-default', 'tag-pill')
+
+    btn.appendChild(icon)
+    li.appendChild(btn)
+    li.appendChild(tag)
+    li.appendChild(liText)
+
+    return li
+  }
+
+  // ------ 
+
+  let places = new Places()
+
+  // page elms
+  const choiceElm = d.getElementById('choice')
+  const rollAgainElm = d.getElementById('roll-again')
+
+  const newPaneElm = d.getElementById('new-pane')
+  const newPaneToggleElm = d.getElementById('new-pane-toggle')
+  const newNameElm = d.getElementById('new-name')
+  const newWeightElm = d.getElementById('new-weight')
+  const newWeightValElm = d.getElementById('new-weight-val')
+  const newAddElm = d.getElementById('new-add')
+
+  const curListElm = d.getElementById('cur-list')
+
+  // init page choice
+  choiceElm.innerHTML = places.getRandom().name
   setTimeout(() => {
-    out.classList.add('show')
-    out.classList.remove('hide')
+    choiceElm.classList.add('show')
+    choiceElm.classList.remove('hide')
   }, 42)
 
-  let slider = d.getElementById('opt1-slider')
+  rollAgainElm.addEventListener('click', () => {
+    choiceElm.classList.add('hide')
 
-  slider.addEventListener('input', () => {
-    d.getElementById('opt1-val').innerHTML = slider.value
-  }, false)
+    // yuck
+    setTimeout(() => {
+      choiceElm.innerHTML = places.getRandom().name
+      choiceElm.classList.remove('hide')
+    }, 300)   
+  })
 
-  slider.dispatchEvent(new Event('input'))
+  places.list.forEach((place, i) => {
+    curListElm.appendChild(new DisplayListItem(place.name, place.weight))
+  })
 
-  const addWrapper = d.getElementById('addwrapper')
-  const addBtn = d.getElementById('addmore')
+  // event listeners
+  newWeightElm.addEventListener('input', (e) => {
+    newWeightValElm.innerHTML = newWeightElm.value
+  })
 
-  addBtn.addEventListener('click', () => {
-    if(addWrapper.classList.contains('hide')) {
-      addWrapper.classList.add('show')
-      addWrapper.classList.remove('hide')
+  newWeightElm.dispatchEvent(new Event('input'))
+
+  newPaneToggleElm.addEventListener('click', (e) => {
+    let addClass = 'show'
+    let removeClass = 'hide'
+
+    if(newPaneElm.classList.contains('hide')) {
+      newPaneElm.classList.add('show')
+      newPaneElm.classList.remove('hide')
     } else {
-      addWrapper.classList.add('hide')
-      addWrapper.classList.remove('show')
+      newPaneElm.classList.add('hide')
+      newPaneElm.classList.remove('show')
     }    
   })
 
-  const removeBtn = d.getElementsByClassName('remove')
+  newAddElm.addEventListener('click', (e) => {
+    const name = newNameElm.value
+    const weight = newWeightElm.value
 
-  Array.from(removeBtn).forEach(elm => {
-    elm.addEventListener('click', (e) => {
+    places.add(name, weight)
+
+    newNameElm.value = ''
+    newWeightElm.value = 5
+    newWeightElm.dispatchEvent(new Event('input'))
+
+    curListElm.appendChild(new DisplayListItem(name, weight))
+  })
+
+  d.body.addEventListener('click', (e) => {
+    if(e.target.classList.contains('remove-place')) {
       const name = e.target.dataset.name
-
-      rList.baseList = rList.baseList.filter(place => {
-        return place.name !== name
-      })
-
-      wList = rList.getWeightedList()
-
       const parentNode = e.target.parentNode
+
+      places.remove(name)
+
       parentNode.classList.add('hide')
 
-      // gross, but the alternative is an optimization
+      // yuck
       setTimeout(() => {
-        ulList.removeChild(parentNode)
+        curListElm.removeChild(parentNode)
       }, 300)
-    })
-  })
-
-  const rollAgain = d.getElementById('rollagain')
-
-  rollAgain.addEventListener('click', () => {
-    rand = Math.floor(Math.random() * wList.length)
-
-    out.classList.add('hide')
-    
-    setTimeout(() => {
-      out.innerHTML = rList.baseList[wList[rand]].name
-      out.classList.remove('hide')
-    }, 300)
-  })
-
-  const addOpt = d.getElementById('opt1-add')
-
-  addOpt.addEventListener('click', () => {
-    const name = d.getElementById('opt1')
-
-    const place = {name: name.value, weight: slider.value}
-
-    name.value = ''
-    slider.value = 5
-    slider.dispatchEvent(new Event('input'))
-
-    rList.baseList.push(place)
-    wList = rList.getWeightedList()
-    ulList.append(new listItemView(place))
+    }
   })
 })(document);

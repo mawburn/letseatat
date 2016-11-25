@@ -10,8 +10,16 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
   <style>
+    html, body, input[type="text"], input[type="text"]:focus {
+      background: #f7f7f7;
+    }
+
     input:focus, button:focus {
         outline:0 !important;
+    }
+
+    .list-group {
+      box-shadow: 1px 1px 10px rgba(77, 77, 77, .1);
     }
 
     .full-vh {
@@ -55,7 +63,7 @@
     
         <div class="row mt-3 flex-items-xs-center">
           <div class="col-sm col-md-4 ">
-            <button id="rollagain" class="btn btn-primary btn-block"><i class="fa fa-fw fa-random"></i>Roll Again</button>
+            <button id="roll-again" class="btn btn-primary btn-block"><i class="fa fa-fw fa-random"></i>Roll Again</button>
           </div>
         </div>
       </div>
@@ -63,26 +71,26 @@
 
     <div class="row">
       <div class="col-md">
-        <button type="button" id="addmore" class="btn btn-secondary"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i>Edit List</button>
+        <button type="button" id="new-pane-toggle" class="btn btn-secondary"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i>Edit List</button>
         
-        <div id="addwrapper" class="hide mt-1">
+        <div id="new-pane" class="hide mt-1">
           <div class="form-group row mt-1">
-            <label for="opt1" class="col-form-label sr-only">Name</label>
+            <label for="new-name" class="col-form-label sr-only">Name</label>
             <div class="col-md-5">
-              <input id="opt1" type="text" placeholder="Restaurant Name" class="form-control nobox">
+              <input id="new-name" type="text" placeholder="Restaurant Name" class="form-control nobox">
             </div>
 
-            <label for="opt1-slider" class="col-md-1 col-form-label">Weight</label>
+            <label for="new-weight" class="col-md-1 col-form-label">Weight</label>
             <div class="col-xs-10 col-md-4">
-              <input id="opt1-slider" type="range" min="1" max="10" value="5" class="form-control">
+              <input id="new-weight" type="range" min="1" max="10" value="5" class="form-control">
             </div>
-            <div id="opt1-val" class="col-xs-2 col-md-1"></div>
-            <div class="col-md-1"><button type="button" id="opt1-add" class="btn btn-primary btn-block"><i class="fa fa-plus-circle fa-fw"></i></button></div>
+            <div id="new-weight-val" class="col-xs-2 col-md-1"></div>
+            <div class="col-md-1"><button type="button" id="new-add" class="btn btn-primary btn-block"><i class="fa fa-plus-circle fa-fw"></i></button></div>
           </div> 
 
           <div class="row flex-items-xs-center mt-3 mb-3">
             <div class="col-sm col-md-6">
-              <ul id="currentlist" class="list-group">
+              <ul id="cur-list" class="list-group">
               </ul>
             </div>
           </div>

@@ -142,8 +142,11 @@
 
     // yuck
     setTimeout(() => {
-      choiceElm.innerHTML = places.getRandom().name
+      let getChoice = places.getRandom().name
+      choiceElm.innerHTML = getChoice 
+      choiceElm.setAttribute('aria-label', `Let's Eat At: ${getChoice}`)
       choiceElm.classList.remove('hide')
+      choiceElm.focus()
     }, 300)   
   })
 

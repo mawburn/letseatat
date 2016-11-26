@@ -8,16 +8,15 @@
 
     if(!initPlaces || JSON.parse(initPlaces).length <= 1) {
        let list = [
-        { "name": "Popeyes", "weight": 1 },
-        { "name": "Wendy's", "weight": 2 },
-        { "name": "Moes", "weight": 5 },
-        { "name": "Crazy Hibachi", "weight": 5 },
-        { "name": "Mama's Gyros", "weight": 5 },
-        { "name": "On the Border", "weight": 5 },
-        { "name": "Buffalo Wild Wings", "weight": 5 },
-        { "name": "Larry's", "weight": 5 },
-        { "name": "BJ's Brewhouse", "weight": 5 },
-        { "name": "Panera Bread", "weight": 5 }
+        { "name": "McDonalds", "weight": 5 },
+        { "name": "Wendy\'s", "weight": 5 },
+        { "name": "Burger King", "weight": 5 },
+        { "name": "Taco Bell", "weight": 5 },
+        { "name": "Chipotle", "weight": 5 },
+        { "name": "KFC", "weight": 5 },
+        { "name": "Subway", "weight": 5 },
+        { "name": "Panera Bread", "weight": 5 },
+        { "name": "Chik-Fil-A", "weight": 5 }
       ]
 
       win.localStorage.setItem(this.localStorageName, JSON.stringify(list))

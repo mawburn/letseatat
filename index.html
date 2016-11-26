@@ -15,9 +15,10 @@
   <meta property="og:image" content="/pick4me.png"/>
 
   <title>Pick4Me</title>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap-flex.css" integrity="sha256-5E2slMOe9pemBvrSE9dbFPkZcx+3ooCJOoFapVey31s=" crossorigin="anonymous" />
 
-  <link rel="stylesheet" href="./icons/style.css" />
+  <link rel="stylesheet" href="./icons/style.css?v=1" />
 
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
@@ -29,6 +30,10 @@
   <style>
     html, body, input[type="text"], input[type="text"]:focus {
       background: #f7f7f7;
+    }
+
+    .icon-edit, .icon-built {
+      margin-right: 0.25rem;
     }
 
     input:focus, button:focus {
@@ -52,7 +57,7 @@
     }
 
     .full-vh {
-      height: 60vh;
+      height: 55vh;
     }
 
     .t-center {
@@ -86,22 +91,31 @@
     }
 
     .btn-primary {
-      background-color: #543b93;
+      background-color: #673AB7;
       border-color: rgba(77, 77, 77, .42);
       border-bottom: 3px solid rgba(22, 22, 22, .3);
       box-shadow: 0px 3px 4px rgba(77, 77, 77, .22);
     }
 
     .btn-primary:hover, .btn-primary:focus {
-      background-color: #48337f;
+      background-color: #512DA8;
       border-color: rgba(77, 77, 77, .42);
       border-bottom: 3px solid rgba(22, 22, 22, .3);
     }
 
     .btn-primary:active:hover, .btn-primary:active:focus, .btn-primary:active.focus, .btn-primary.active:hover, .btn-primary.active:focus, .btn-primary.active.focus, .open > .btn-primary.dropdown-toggle:hover, .open > .btn-primary.dropdown-toggle:focus, .open > .btn-primary.dropdown-toggle.focus {
-      background-color: #3d2a6b;
+      background-color: #311B92;
       box-shadow: 0px 1px 2px rgba(77, 77, 77, .42);
       border-bottom: 3px solid transparent;
+    }
+
+    .btn-danger {
+      background-color: #e57373; 
+      border-color: #ef5350;
+    }
+
+    .btn-danger:hover, .btn-danger:focus {
+      background-color: #e53935;
     }
     </style>
 </head>
@@ -121,7 +135,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-2">
       <div class="col-md">
         <button type="button" id="new-pane-toggle" class="btn btn-secondary"><i class="icon-edit" aria-hidden="true"></i>Customize List</button>
         
@@ -137,7 +151,7 @@
               <input id="new-weight" type="range" min="1" max="10" value="5" class="form-control">
             </div>
             <div id="new-weight-val" class="col-xs-2 col-md-1"></div>
-            <div class="col-md-1"><button type="button" id="new-add" class="btn btn-primary btn-block"><i class="icon-plus"></i></button></div>
+            <div class="col-md-1"><button type="button" id="new-add" class="btn btn-primary btn-block"><i class="icon-add"></i></button></div>
           </div> 
 
           <div class="row flex-items-xs-center mt-3">
@@ -152,12 +166,12 @@
 
     <footer class="row flex-items-xs-bottom flex-items-xs-right mt-3">
       <div class="col-xs text-xs-right">
-        Made by <a rel="author" href="https://mawburn.com">mawburn</a>
+        <i class="icon-built"></i> by <a rel="author" href="https://mawburn.com">mawburn</a>
       </div>
     </footer>   
   </div>
 
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=5"></script>
 
   <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

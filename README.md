@@ -1,2 +1,2 @@
-# Can't pick lunch? Lunch picker can help
-https://mawburn.com/letseatat
+# Can't pick lunch? Please pick for me
+https://pleasepickfor.me

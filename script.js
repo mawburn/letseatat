@@ -77,7 +77,7 @@
     let liText = doc.createTextNode(name)
 
     let icon = doc.createElement('i')
-    icon.classList.add('fa', 'fa-fw', 'fa-trash')
+    icon.classList.add('icon-trash')
 
     let btn = doc.createElement('button')
     btn.classList.add('btn', 'btn-danger', 'mr-3', 'remove-place')
@@ -151,15 +151,22 @@
   newWeightElm.dispatchEvent(new Event('input'))
 
   newPaneToggleElm.addEventListener('click', (e) => {
-    let addClass = 'show'
-    let removeClass = 'hide'
-
     if(newPaneElm.classList.contains('hide')) {
       newPaneElm.classList.add('show')
       newPaneElm.classList.remove('hide')
+      newPaneElm.style.display = 'block'
+      newPaneElm.style.opacity = 0
+
+      setTimeout(() => {
+        newPaneElm.style.opacity = null
+      }, 10)
     } else {
       newPaneElm.classList.add('hide')
       newPaneElm.classList.remove('show')
+
+      setTimeout(() => {
+        newPaneElm.style.display = 'none'
+      }, 300)
     }    
   })
 

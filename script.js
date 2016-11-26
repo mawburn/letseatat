@@ -78,10 +78,12 @@
 
     let icon = doc.createElement('i')
     icon.classList.add('icon-trash')
+    icon.setAttribute('aria-hidden', true)
 
     let btn = doc.createElement('button')
     btn.classList.add('btn', 'btn-danger', 'mr-3', 'remove-place')
     btn.setAttribute('data-name', name)
+    btn.setAttribute('aria-label', `Remove: ${name}, weight: ${weight}`)
     btn.appendChild(icon)
 
     let tag = doc.createElement('span')
@@ -123,10 +125,16 @@
   const curListElm = doc.getElementById('cur-list')
 
   // init page choice
-  choiceElm.innerHTML = places.getRandom().name
+  let getChoice = places.getRandom().name
+  choiceElm.innerHTML = getChoice 
+  choiceElm.setAttribute('aria-label', `Let's Eat At: ${getChoice}`)
   setTimeout(() => {
     choiceElm.classList.add('show')
     choiceElm.classList.remove('hide')
+
+    setTimeout(() => {
+      choiceElm.focus()
+    }, 300)
   }, 42)
 
   rollAgainElm.addEventListener('click', () => {

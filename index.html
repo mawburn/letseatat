@@ -9,10 +9,11 @@
   <meta name="keywords" content="app,random,restaurant,pick,picker,randomizer,list,pwa">
   <meta name="author" href="https://mawburn.com" content="mawburn">
 
-  <meta property="og:title" content="Can't decide where to eat? Please pick for me!"/>
+  <meta property="og:title" content="Please pick for me"/>
+  <meta property="og:type" content="website">
   <meta property="og:url" content="https://pleasepickfor.me"/>
-  <meta property="og:description" content="Please pick somewhere to eat for me"/>
-  <meta property="og:image" content="/pick4me.png"/>
+  <meta property="og:description" content="Can't decide where to eat? Please pick for me!"/>
+  <meta property="og:image" content="https://pleasepickfor.me/pick4me.png"/>
 
   <title>Please Pick for Me</title>
   
@@ -99,8 +100,11 @@
 
     .btn-primary:active:hover, .btn-primary:active:focus, .btn-primary:active.focus, .btn-primary.active:hover, .btn-primary.active:focus, .btn-primary.active.focus, .open > .btn-primary.dropdown-toggle:hover, .open > .btn-primary.dropdown-toggle:focus, .open > .btn-primary.dropdown-toggle.focus {
       background-color: #33691E;
-      box-shadow: 0px 1px 2px rgba(77, 77, 77, .42);
-      border-bottom: 3px solid transparent;
+      color: #101010;
+      box-shadow: 0px 0px 2px rgba(77, 77, 77, .42);
+      border-top: 3px solid rgba(7, 7, 7, .2);
+      border-left: 2px solid rgba(7, 7, 7, .2);
+      border-bottom: 0px solid transparent;
     }
 
     .btn-danger {
@@ -137,11 +141,11 @@
     <div class="row full-vh flex-items-xs-middle t-center">
       <div class="col-xs">
         <h1 class="display t-center" tabindex="-1">Let's eat at...</h1>
-        <h2 id="choice" class="t-center hide" tabindex="0"></h2>
+        <h2 id="choice" class="t-center hide mt-2" tabindex="0"></h2>
     
         <div class="row mt-3 flex-items-xs-center">
           <div class="col-xs-6 col-sm-4 col-md-2">
-            <button id="roll-again" class="btn btn-primary btn-block" aria-label="yuck, pick again">...nah</button>
+            <button id="roll-again" class="btn btn-primary btn-block" aria-label="yuck">...nah</button>
           </div>
         </div>
       </div>
@@ -185,7 +189,7 @@
     </footer>   
   </div>
 
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=10"></script>
 
   <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

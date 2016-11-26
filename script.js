@@ -16,7 +16,7 @@
         { "name": "KFC", "weight": 5 },
         { "name": "Subway", "weight": 5 },
         { "name": "Panera Bread", "weight": 5 },
-        { "name": "Chik-Fil-A", "weight": 5 }
+        { "name": "Chick-fil-A", "weight": 5 }
       ]
 
       win.localStorage.setItem(this.localStorageName, JSON.stringify(list))
@@ -33,7 +33,7 @@
 
   Places.prototype.add = function(name, weight) {
     let list = this.getList()
-    list.push({name, weight})
+    list.push({name: name.trim(), weight})
 
     this.setList(list)
   }
@@ -146,7 +146,11 @@
       choiceElm.innerHTML = getChoice 
       choiceElm.setAttribute('aria-label', `Let's Eat At: ${getChoice}`)
       choiceElm.classList.remove('hide')
-      choiceElm.focus()
+      
+      // screenreader - I really need a hook for the css transition
+      setTimeout(() => {
+        choiceElm.focus()
+      }, 300)
     }, 300)   
   })
 

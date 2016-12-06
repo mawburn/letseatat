@@ -7,19 +7,26 @@
     let initPlaces = win.localStorage.getItem(this.localStorageName)
 
     if(!initPlaces || JSON.parse(initPlaces).length <= 1) {
-       let list = [
-        { "name": "McDonalds", "weight": 5 },
-        { "name": "Wendy\'s", "weight": 5 },
-        { "name": "Burger King", "weight": 5 },
-        { "name": "Taco Bell", "weight": 5 },
-        { "name": "Chipotle", "weight": 5 },
-        { "name": "KFC", "weight": 5 },
-        { "name": "Subway", "weight": 5 },
-        { "name": "Panera Bread", "weight": 5 },
-        { "name": "Chick-fil-A", "weight": 5 }
-      ]
 
-      win.localStorage.setItem(this.localStorageName, JSON.stringify(list))
+      navigator.geolocation.getCurrentPosition((pos) => {
+        console.log({lat: pos.coords.latitude, long: pos.coords.longitude})
+        let formData = new FormData()
+        formData.append('lat', pos.coords.latitude)
+        formData.append('long', pos.coords.longitude)
+
+        fetch('http://localhost:4242', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+          },
+          body: formData
+        })
+        .then(res => res.json())
+        .then(json => {
+          console.log(json)
+          win.localStorage.setItem(this.localStorageName, JSON.stringify(list))
+        }) 
+      })
     }
   }
 

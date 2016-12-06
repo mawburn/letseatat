@@ -2,8 +2,9 @@ const fs = require('fs')
 const server = require('express')
 const bodyParser = require('body-parser')
 const fetch = require('isomorphic-fetch')
-const RateLimit = require('express-rate-limit');
+const RateLimit = require('express-rate-limit')
 const winston = require('winston')
+const cors = require('cors')
 require('dotenv').config()
 require('winston-daily-rotate-file')
 
@@ -36,8 +37,10 @@ const limiter = new RateLimit({
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(limiter)
+app.use(cors())
 
 app.post('/', (req, res) => {
+  console.log(req.body)
   let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
   let lat = req.body.lat
   let long = req.body.long
@@ -45,11 +48,16 @@ app.post('/', (req, res) => {
   logger.info({message: {ip, lat, long}})
 
   fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${long}&rankby=prominence&opennow=true&radius=8500&type=restaurant&key=${googleKey}`)
-    .then(gRes => {
-      return gRes.json()
-    })
+    .then(gRes => gRes.json())
     .then(json => {
-      res.send(json)
+      let newData = json.results.map(place => {
+        let weight = Math.round(place.rating) || 2
+        return {name: place.name, weight}
+      })
+
+      Promise.all(newData).then(() => {
+        res.send(newData)
+      })
     })
 })
 

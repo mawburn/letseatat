@@ -6,15 +6,15 @@
     this.valid = false // quick hack to not have to rework logic
 
     let defaultPlaces = [
-      { "name": "McDonalds", "weight": 5 },
-      { "name": "Wendy\'s", "weight": 5 },
-      { "name": "Burger King", "weight": 5 },
-      { "name": "Taco Bell", "weight": 5 },
-      { "name": "Chipotle", "weight": 5 },
-      { "name": "KFC", "weight": 5 },
-      { "name": "Subway", "weight": 5 },
-      { "name": "Panera Bread", "weight": 5 },
-      { "name": "Chick-fil-A", "weight": 5 }
+      { "name": "McDonalds", "weight": 5, url: '#' },
+      { "name": "Wendy\'s", "weight": 5, url: '#' },
+      { "name": "Burger King", "weight": 5, url: '#' },
+      { "name": "Taco Bell", "weight": 5, url: '#' },
+      { "name": "Chipotle", "weight": 5, url: '#' },
+      { "name": "KFC", "weight": 5, url: '#' },
+      { "name": "Subway", "weight": 5, url: '#' },
+      { "name": "Panera Bread", "weight": 5, url: '#' },
+      { "name": "Chick-fil-A", "weight": 5, url: '#' }
     ]
 
     if(navigator.geolocation) {
@@ -129,7 +129,7 @@
   function init(count = 0) {
     // so freaking gross, I can't believe I'm showing this to anyone
     if(!places.valid) {
-      if(count > 10) {
+      if(count > 30) {
         alert('Something went wrong :(')
       } else {
         setTimeout(() => init(++count), 500)
@@ -148,9 +148,9 @@
 
       const curListElm = doc.getElementById('cur-list')
 
-      let getChoice = places.getRandom().name
-      choiceElm.innerHTML = getChoice 
-      choiceElm.setAttribute('aria-label', `Let's Eat At: ${getChoice}`)
+      let getChoice = places.getRandom()
+      choiceElm.innerHTML = `<a href="${getChoice.url}">${getChoice.name}</a>` 
+      choiceElm.setAttribute('aria-label', `Let's Eat At: ${getChoice.name}`)
       setTimeout(() => {
         choiceElm.classList.add('show')
         choiceElm.classList.remove('hide')

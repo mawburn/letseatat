@@ -20,17 +20,20 @@
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos => {
         return fetch(`https://wt-5eb43228035d150edc08e7002ca810ee-0.run.webtask.io/pick4me.js?lat=${pos.coords.latitude}&long=${pos.coords.longitude}`)
-          .then(googlePlaces => {
-            win.localStorage.setItem(this.localStorageName, JSON.stringify(googlePlaces))
+          .then(response => response.json())
+          .then(json => {
+            win.localStorage.setItem(this.localStorageName, JSON.stringify(json.places))
             this.valid = true
           })
       }, err => {
         win.localStorage.setItem(this.localStorageName, JSON.stringify(defaultPlaces))
         this.valid = true
+        console.log('that')
       })
     } else {
       win.localStorage.setItem(this.localStorageName, JSON.stringify(defaultPlaces))
       this.valid = true
+      console.lot('this other thing')
     }
   }
 
@@ -237,4 +240,6 @@
       })
     }    
   }
+
+  init()
 })(window, document);

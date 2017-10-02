@@ -3,23 +3,37 @@
 
   let Places = function() {
     this.localStorageName = 'places'
+    this.valid = false // quick hack to not have to rework logic
 
-    let initPlaces = win.localStorage.getItem(this.localStorageName)
+    let defaultPlaces = [
+      { "name": "McDonalds", "weight": 5 },
+      { "name": "Wendy\'s", "weight": 5 },
+      { "name": "Burger King", "weight": 5 },
+      { "name": "Taco Bell", "weight": 5 },
+      { "name": "Chipotle", "weight": 5 },
+      { "name": "KFC", "weight": 5 },
+      { "name": "Subway", "weight": 5 },
+      { "name": "Panera Bread", "weight": 5 },
+      { "name": "Chick-fil-A", "weight": 5 }
+    ]
 
-    if(!initPlaces || JSON.parse(initPlaces).length <= 1) {
-       let list = [
-        { "name": "McDonalds", "weight": 5 },
-        { "name": "Wendy\'s", "weight": 5 },
-        { "name": "Burger King", "weight": 5 },
-        { "name": "Taco Bell", "weight": 5 },
-        { "name": "Chipotle", "weight": 5 },
-        { "name": "KFC", "weight": 5 },
-        { "name": "Subway", "weight": 5 },
-        { "name": "Panera Bread", "weight": 5 },
-        { "name": "Chick-fil-A", "weight": 5 }
-      ]
-
-      win.localStorage.setItem(this.localStorageName, JSON.stringify(list))
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        return fetch(`https://wt-5eb43228035d150edc08e7002ca810ee-0.run.webtask.io/pick4me.js?lat=${pos.coords.latitude}&long=${pos.coords.longitude}`)
+          .then(response => response.json())
+          .then(json => {
+            win.localStorage.setItem(this.localStorageName, JSON.stringify(json.places))
+            this.valid = true
+          })
+      }, err => {
+        win.localStorage.setItem(this.localStorageName, JSON.stringify(defaultPlaces))
+        this.valid = true
+        console.log('that')
+      })
+    } else {
+      win.localStorage.setItem(this.localStorageName, JSON.stringify(defaultPlaces))
+      this.valid = true
+      console.lot('this other thing')
     }
   }
 
@@ -111,108 +125,121 @@
 
   let places = new Places()
 
-  // page elms
-  const choiceElm = doc.getElementById('choice')
-  const rollAgainElm = doc.getElementById('roll-again')
-
-  const newPaneElm = doc.getElementById('new-pane')
-  const newPaneToggleElm = doc.getElementById('new-pane-toggle')
-  const newNameElm = doc.getElementById('new-name')
-  const newWeightElm = doc.getElementById('new-weight')
-  const newWeightValElm = doc.getElementById('new-weight-val')
-  const newAddElm = doc.getElementById('new-add')
-
-  const curListElm = doc.getElementById('cur-list')
-
   // init page choice
-  let getChoice = places.getRandom().name
-  choiceElm.innerHTML = getChoice 
-  choiceElm.setAttribute('aria-label', `Let's Eat At: ${getChoice}`)
-  setTimeout(() => {
-    choiceElm.classList.add('show')
-    choiceElm.classList.remove('hide')
+  function init(count = 0) {
+    // so freaking gross, I can't believe I'm showing this to anyone
+    if(!places.valid) {
+      if(count > 10) {
+        alert('Something went wrong :(')
+      } else {
+        setTimeout(() => init(++count), 500)
+      }
+    } else {
+      // page elms
+      const choiceElm = doc.getElementById('choice')
+      const rollAgainElm = doc.getElementById('roll-again')
 
-    setTimeout(() => {
-      choiceElm.focus()
-    }, 300)
-  }, 42)
+      const newPaneElm = doc.getElementById('new-pane')
+      const newPaneToggleElm = doc.getElementById('new-pane-toggle')
+      const newNameElm = doc.getElementById('new-name')
+      const newWeightElm = doc.getElementById('new-weight')
+      const newWeightValElm = doc.getElementById('new-weight-val')
+      const newAddElm = doc.getElementById('new-add')
 
-  rollAgainElm.addEventListener('click', () => {
-    choiceElm.classList.add('hide')
+      const curListElm = doc.getElementById('cur-list')
 
-    // yuck
-    setTimeout(() => {
       let getChoice = places.getRandom().name
       choiceElm.innerHTML = getChoice 
       choiceElm.setAttribute('aria-label', `Let's Eat At: ${getChoice}`)
-      choiceElm.classList.remove('hide')
-      
-      // screenreader - I really need a hook for the css transition
       setTimeout(() => {
-        choiceElm.focus()
-      }, 300)
-    }, 300)   
-  })
+        choiceElm.classList.add('show')
+        choiceElm.classList.remove('hide')
 
-  places.getList().forEach((place, i) => {
-    curListElm.appendChild(new DisplayListItem(place.name, place.weight))
-  })
+        setTimeout(() => {
+          choiceElm.focus()
+        }, 300)
+      }, 42)
 
-  // event listeners
-  newWeightElm.addEventListener('input', (e) => {
-    newWeightValElm.innerHTML = newWeightElm.value
-  })
+      rollAgainElm.addEventListener('click', () => {
+        choiceElm.classList.add('hide')
 
-  newWeightElm.dispatchEvent(new Event('input'))
+        // yuck
+        setTimeout(() => {
+          let getChoice = places.getRandom().name
+          choiceElm.innerHTML = getChoice 
+          choiceElm.setAttribute('aria-label', `Let's Eat At: ${getChoice}`)
+          choiceElm.classList.remove('hide')
+          
+          // screenreader - I really need a hook for the css transition
+          setTimeout(() => {
+            choiceElm.focus()
+          }, 300)
+        }, 300)   
+      })
 
-  newPaneToggleElm.addEventListener('click', (e) => {
-    if(newPaneElm.classList.contains('hide')) {
-      newPaneElm.classList.add('show')
-      newPaneElm.classList.remove('hide')
-      newPaneElm.style.display = 'block'
-      newPaneElm.style.opacity = 0
+      places.getList().forEach((place, i) => {
+        curListElm.appendChild(new DisplayListItem(place.name, place.weight))
+      })
 
-      setTimeout(() => {
-        newPaneElm.style.opacity = null
-      }, 10)
-    } else {
-      newPaneElm.classList.add('hide')
-      newPaneElm.classList.remove('show')
+      // event listeners
+      newWeightElm.addEventListener('input', (e) => {
+        newWeightValElm.innerHTML = newWeightElm.value
+      })
 
-      setTimeout(() => {
-        newPaneElm.style.display = 'none'
-      }, 300)
-    }    
-  })
-
-  newAddElm.addEventListener('click', (e) => {
-    const name = newNameElm.value
-    const weight = newWeightElm.value
-
-    if(name.length !== 0) {
-      places.add(name, weight)
-
-      newNameElm.value = ''
-      newWeightElm.value = 5
       newWeightElm.dispatchEvent(new Event('input'))
 
-      curListElm.appendChild(new DisplayListItem(name, weight))
-    }
-  })
+      newPaneToggleElm.addEventListener('click', (e) => {
+        if(newPaneElm.classList.contains('hide')) {
+          newPaneElm.classList.add('show')
+          newPaneElm.classList.remove('hide')
+          newPaneElm.style.display = 'block'
+          newPaneElm.style.opacity = 0
 
-  doc.body.addEventListener('click', (e) => {
-    if(e.target.classList.contains('remove-place')) {
-      const name = e.target.dataset.name
-      const parentNode = e.target.parentNode
+          setTimeout(() => {
+            newPaneElm.style.opacity = null
+          }, 10)
+        } else {
+          newPaneElm.classList.add('hide')
+          newPaneElm.classList.remove('show')
 
-      places.remove(name)
+          setTimeout(() => {
+            newPaneElm.style.display = 'none'
+          }, 300)
+        }    
+      })
 
-      parentNode.classList.add('hide')
+      newAddElm.addEventListener('click', (e) => {
+        const name = newNameElm.value
+        const weight = newWeightElm.value
 
-      // yuck
-      setTimeout(() => {
-        curListElm.removeChild(parentNode)
-      }, 300)
-    }
-  })
+        if(name.length !== 0) {
+          places.add(name, weight)
+
+          newNameElm.value = ''
+          newWeightElm.value = 5
+          newWeightElm.dispatchEvent(new Event('input'))
+
+          curListElm.appendChild(new DisplayListItem(name, weight))
+        }
+      })
+
+      doc.body.addEventListener('click', (e) => {
+        if(e.target.classList.contains('remove-place')) {
+          const name = e.target.dataset.name
+          const parentNode = e.target.parentNode
+
+          places.remove(name)
+
+          parentNode.classList.add('hide')
+
+          // yuck
+          setTimeout(() => {
+            curListElm.removeChild(parentNode)
+          }, 300)
+        }
+      })
+    }    
+  }
+
+  init()
 })(window, document);
